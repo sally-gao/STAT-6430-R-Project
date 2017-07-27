@@ -1,5 +1,5 @@
 # Assignment:     R Project (STAT 6430)
-# Names:          Sally Gao, Steven Mortensen, Kennan Grant
+# Names:          Sally Gao, Stephen Mortensen, Kennan Grant
 # Computing IDs:  sg2zv, sam8sp, khg3je
 
 # load libraries

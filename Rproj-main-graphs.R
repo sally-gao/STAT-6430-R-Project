@@ -111,11 +111,12 @@ high_mode_ratings
 
 mode_ratings <- as.data.frame(matrix(NA, nrow=1,ncol=3))
 mode_ratings[1,] <- c("Mode","High Mode", 8.956)
+mode_ratings[2,] <- c("Mode","Low Mode", -18.43583)
 names(mode_ratings) <- c("Analysis","Category", "Prop")
 
 ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
   geom_bar(stat="identity", fill="indianred") +
-  labs(x="High Mode", y="Proportion of High Rtngs - 55.375")
+  labs(x="High Mode", y="Proportion of High Rtngs - 55.375", title="High Mode/Low Mode", subtitle="Proportion of high ratings vs. population")
 
 
 # Note that we checked to make sure that it was *NOT* the case that many
@@ -171,7 +172,7 @@ names(time_ratings) <- c("Analysis","Category", "Prop")
 
 ggplot(data=time_ratings, aes(x=Category, y=Prop)) +
   geom_bar(stat="identity", fill="steelblue") +
-  labs(x="Hour", y="Proportion of High Rtngs - 55.375")
+  labs(x="Hour", y="Proportion of High Rtngs - 55.375", title="Times of Day", subtitle="Proportion of high ratings vs. population")
 
 
 # Release Date ------------------------------------------------------------
@@ -215,7 +216,7 @@ names(date_ratings) <- c("Analysis","Category", "Prop")
 
 ggplot(data=date_ratings, aes(x=Category, y=Prop)) + 
   geom_bar(stat="identity", fill="seagreen") +
-  labs(x="Month", y="Proportion of High Rtngs - 55.375")
+  labs(x="Month", y="Proportion of High Rtngs - 55.375", title="Month of Year", subtitle="Proportion of high ratings vs. population")
 
 
 # Genres -------------------------------------------------------------
@@ -268,7 +269,7 @@ genre_ratings
 
 ggplot(data=genre_ratings, aes(x=Category, y=Prop)) + 
   geom_bar(stat="identity", fill="peachpuff") +
-  labs(x="Genre", y="Proportion of High Rtngs - 55.375")
+  labs(x="Genre", y="Proportion of High Rtngs - 55.375", title="Film Noir and War Genres", subtitle="Proportion of high ratings vs. population")
 
 
 # State -------------------------------------------------------------------
@@ -352,7 +353,7 @@ state_ratings <- state_ratings[1:10,]
 
 ggplot(data=state_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
   geom_bar(stat="identity", fill="mediumpurple") +
-  labs(x="State", y="Proportion of High Rtngs - 55.375")
+  labs(x="State", y="Proportion of High Rtngs - 55.375", title="Top 10 States", subtitle="Proportion of high ratings vs. population")
 
 
 # City --------------------------------------------------------------------
@@ -373,4 +374,4 @@ mastergraph
 ggplot(data=mastergraph, aes(x=Category, y=Prop))+
   geom_bar(fill='steelblue', stat="identity")+
   facet_wrap( ~ Analysis, scales="free_x")+
-  labs(x="Category", y="Proportion of High Rtngs - 55.375")
+  labs(x="Category", y="Proportion of High Rtngs - 55.375", title="Mode, Time of Day, Month in Year, Genre, and State", subtitle="Proportion of high ratings vs. population")

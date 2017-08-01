@@ -22,22 +22,6 @@ normalized_base_table <- reviews %>%
   left_join(zip_codes, by = "zip_code")
 
 
-# The Fundamental Question ------------------------------------------------
-
-# 
-# Given an explanatory variable value/level is an attribute of an observation, 
-# what is the probability that the response variable of the observation is
-# a particular value/level? If the probability is higher than the probability
-# of encountering that response value/level in the overall dataset, then that
-# explanatory variable value/level is predictive and can be said to be
-# "associated" with the target response value/level.
-#
-# In our case, we want to know 'what seems to be associated with a high rating?'
-# In other words: What variable values/levels, when present, predict a high
-# rating with a higher probability than the baseline probability in the overall
-# dataset?
-#
-
 # Rating Distribution Overview (Graph 1) --------------------------------------
 
 # rating distribution bar chart
@@ -54,11 +38,11 @@ normalized_base_table %>%
             , percent = n/100000*100)
 
 # conclusion: 
-34.174 + 21.201 # 55.375% of reviews are 'high' ratings of 4 or 5. This is the 
-# 'baseline probability'.  For a variable value/level to be 
+34.174 + 21.201 # 55.375% of reviews are 'high' ratings of 4 or 5. This is the
+# 'baseline probability'.  For a variable value/level to be
 # 'associated' with a high-rating (4 or 5), then, given that particular
 # variable value/level the probability of a high-rating
-# must be higher than 55.375%. 
+# must be higher than 55.375%.
 
 
 
@@ -82,6 +66,7 @@ high_mode_ratings <- mode_appended %>%
             , perc_high_rating = sum(rating == 4 | rating == 5)/n*100) %>% 
   as.data.frame() %>% 
   arrange(desc(perc_high_rating)) # 64% -- implies association
+
 
 # create pie chart of 64% !!!
 
@@ -150,7 +135,7 @@ normalized_base_table %>%
             , unique_reviewers = n_distinct(reviewer_id)
             , perc_high_rating = sum(rating == 4 | rating == 5)/n*100) %>% 
   as.data.frame() %>% 
-  arrange(desc(perc_high_rating))
+  arrange(desc(perc_high_rating))  ## FIX THIS B/C REVIEWER NUMBER
 
 
 # City --------------------------------------------------------------------

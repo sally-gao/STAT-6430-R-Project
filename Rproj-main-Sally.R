@@ -1,5 +1,3 @@
-library(plyr)
-
 # 1. Which percentage of each rating was given?
 # =============================================
 
@@ -80,7 +78,7 @@ movies.count.sorted <- movies.count[order(-movies.count$times_reviewed), ]
 movies10 <- movies.count.sorted[1:10,]
 
 # join with movies to get movie titles (used join instead of merge to preserve movies10 order)
-movies10.named <- join(movies10, movies[, c("movie_id", "movie_title")], by="movie_id")
+movies10.named <- plyr::join(movies10, movies[, c("movie_id", "movie_title")], by="movie_id")
 movies10.named[,c("movie_title", "times_reviewed")]
 
 # Output:

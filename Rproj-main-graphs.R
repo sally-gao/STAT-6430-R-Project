@@ -109,12 +109,13 @@ propdiffint(high_mode_ratings)
 
 high_mode_ratings
 
-mode_ratings <- as.data.frame(matrix(NA, nrow=1,ncol=4))
-mode_ratings[1,] <- c("Mode","High Mode", 8.956, "indianred")
-names(mode_ratings) <- c("Analysis","Category", "Prop", "ColorChoice")
+mode_ratings <- as.data.frame(matrix(NA, nrow=1,ncol=3))
+mode_ratings[1,] <- c("Mode","High Mode", 8.956)
+names(mode_ratings) <- c("Analysis","Category", "Prop")
 
-ggplot(data=mode_ratings, aes(x=Category, y=Prop, fill=ColorChoice)) +
-  geom_bar(stat="identity") + guides(fill=FALSE)
+ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
+  geom_bar(stat="identity", fill="indianred") +
+  labs(x="High Mode", y="Proportion of High Rtngs - 55.375")
 
 
 # Note that we checked to make sure that it was *NOT* the case that many
@@ -162,14 +163,15 @@ propdiffint(time_ratings1)
 # 23   10 -0.145866736 -0.089059425
 # 24    9 -0.144878581 -0.100499430
 
-time_ratings <- as.data.frame(matrix(NA, nrow=24,ncol=4))
+time_ratings <- as.data.frame(matrix(NA, nrow=24,ncol=3))
 time_ratings[,1] <- "Time"
 time_ratings[,2] <- time_ratings1[,1]
 time_ratings[,3] <- time_ratings1[,3]-55.375
-time_ratings[,4] <- "steelblue"
-names(time_ratings) <- c("Analysis","Category", "Prop", "ColorChoice")
+names(time_ratings) <- c("Analysis","Category", "Prop")
 
-ggplot(data=time_ratings, aes(x=Category, y=Prop, fill=ColorChoice)) + geom_bar(stat="identity") 
+ggplot(data=time_ratings, aes(x=Category, y=Prop)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  labs(x="Hour", y="Proportion of High Rtngs - 55.375")
 
 
 # Release Date ------------------------------------------------------------
@@ -205,14 +207,15 @@ propdiffint(date_ratings1)
 
 date_ratings1
 
-date_ratings <- as.data.frame(matrix(NA, nrow=13,ncol=4))
+date_ratings <- as.data.frame(matrix(NA, nrow=13,ncol=3))
 date_ratings[,1] <- "Date"
 date_ratings[,2] <- date_ratings1[,1]
 date_ratings[,3] <- date_ratings1[,3]-55.375
-date_ratings[,4] <- "seagreen"
-names(date_ratings) <- c("Analysis","Category", "Prop", "ColorChoice")
+names(date_ratings) <- c("Analysis","Category", "Prop")
 
-ggplot(data=date_ratings, aes(x=Category, y=Prop)) + geom_bar(stat="identity", fill="seagreen") 
+ggplot(data=date_ratings, aes(x=Category, y=Prop)) + 
+  geom_bar(stat="identity", fill="seagreen") +
+  labs(x="Month", y="Proportion of High Rtngs - 55.375")
 
 
 # Genres -------------------------------------------------------------
@@ -255,16 +258,17 @@ propdiffint(genre_loop)
 
 genre_rating
 
-genre_ratings <- as.data.frame(matrix(NA, nrow=2,ncol=4))
+genre_ratings <- as.data.frame(matrix(NA, nrow=2,ncol=3))
 genre_ratings[,1] <- "Genre"
 genre_ratings[,2] <- genre_rating[,1]
 genre_ratings[,3] <- genre_rating[,4]
-genre_ratings[,4] <- "peachpuff"
-names(genre_ratings) <- c("Analysis","Category", "Prop", "ColorChoice")
+names(genre_ratings) <- c("Analysis","Category", "Prop")
 
 genre_ratings
 
-ggplot(data=genre_ratings, aes(x=Category, y=Prop)) + geom_bar(stat="identity", fill="peachpuff") 
+ggplot(data=genre_ratings, aes(x=Category, y=Prop)) + 
+  geom_bar(stat="identity", fill="peachpuff") +
+  labs(x="Genre", y="Proportion of High Rtngs - 55.375")
 
 
 # State -------------------------------------------------------------------
@@ -338,16 +342,17 @@ propdiffint(state_loop)
 # 53       AR   -0.320600288577238   0.0592541347310841
 # 54       ND   -0.218686108283944  -0.0922770951792588
 
-state_ratings <- as.data.frame(matrix(NA, nrow=54,ncol=4))
+state_ratings <- as.data.frame(matrix(NA, nrow=54,ncol=3))
 state_ratings[,1] <- "State"
 state_ratings[,2] <- state_ratings1[,1]
 state_ratings[,3] <- state_ratings1[,4]-55.375
-state_ratings[,4] <- "mediumpurple"
-names(state_ratings) <- c("Analysis","Category", "Prop", "ColorChoice")
+names(state_ratings) <- c("Analysis","Category", "Prop")
 
 state_ratings <- state_ratings[1:10,]
 
-ggplot(data=state_ratings, aes(x=reorder(Category, -Prop), y=Prop)) + geom_bar(stat="identity", fill="mediumpurple") 
+ggplot(data=state_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
+  geom_bar(stat="identity", fill="mediumpurple") +
+  labs(x="State", y="Proportion of High Rtngs - 55.375")
 
 
 # City --------------------------------------------------------------------
@@ -365,4 +370,7 @@ normalized_base_table %>%
 mastergraph <- rbind(mode_ratings, time_ratings,date_ratings,genre_ratings,state_ratings)
 mastergraph
 
-ggplot(data=mastergraph, aes(x=Category, y=Prop))+geom_bar(fill='steelblue', stat="identity")+facet_wrap( ~ Analysis, scales="free_x")+guides(fill=FALSE)+scale_y_continuous(labels=scales::percent)
+ggplot(data=mastergraph, aes(x=Category, y=Prop))+
+  geom_bar(fill='steelblue', stat="identity")+
+  facet_wrap( ~ Analysis, scales="free_x")+
+  labs(x="Category", y="Proportion of High Rtngs - 55.375")

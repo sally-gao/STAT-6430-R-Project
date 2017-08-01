@@ -14,6 +14,8 @@ big_table <- reviews %>%
 # fill in Location as CANADA for zip codes with letters in them
 big_table$Location[grepl("[[:alpha:]]", big_table$zip_code)]<- "CANADA"
 
+big_table$occupation <- factor(big_table$occupation)
+
 mean(big_table$rating) # 3.52986
 
 big_table %>% 

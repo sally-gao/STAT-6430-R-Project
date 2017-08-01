@@ -1,3 +1,4 @@
+library(plyr)
 
 # 1. Which percentage of each rating was given?
 # =============================================
@@ -78,21 +79,22 @@ movies.count.sorted <- movies.count[order(-movies.count$times_reviewed), ]
 # get top 10
 movies10 <- movies.count.sorted[1:10,]
 
-# merge with movies to get movie titles
-movies10.named <- merge(movies10, movies[, c("movie_id", "movie_title")], by="movie_id")
+# join with movies to get movie titles (used join instead of merge to preserve movies10 order)
+movies10.named <- join(movies10, movies[, c("movie_id", "movie_title")], by="movie_id")
 movies10.named[,c("movie_title", "times_reviewed")]
+
 # Output:
 # movie_title times_reviewed
-# 1               Toy Story (1995)            452
-# 2               Star Wars (1977)            583
+# 1               Star Wars (1977)            583
+# 2                 Contact (1997)            509
 # 3                   Fargo (1996)            508
-# 4  Independence Day (ID4) (1996)            429
-# 5      Return of the Jedi (1983)            507
-# 6                 Contact (1997)            509
-# 7    English Patient, The (1996)            481
-# 8                  Scream (1996)            478
-# 9               Liar Liar (1997)            485
-# 10          Air Force One (1997)            431
+# 4      Return of the Jedi (1983)            507
+# 5               Liar Liar (1997)            485
+# 6    English Patient, The (1996)            481
+# 7                  Scream (1996)            478
+# 8               Toy Story (1995)            452
+# 9           Air Force One (1997)            431
+# 10 Independence Day (ID4) (1996)            429
 
 # 5. Which genres occurred most/least often, based on the number of reviews? 
 # ==========================================================================

@@ -114,9 +114,14 @@ mode_ratings[1,] <- c("Mode","High Mode", 8.956)
 mode_ratings[2,] <- c("Mode","Low Mode", -18.43583)
 names(mode_ratings) <- c("Analysis","Category", "Prop")
 
+mode_ratings$Prop <- as.double(mode_ratings$Prop) + 
+
 ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
   geom_bar(stat="identity", fill="indianred") +
-  labs(x="High Mode", y="Proportion of High Rtngs - 55.375", title="High Mode/Low Mode", subtitle="Proportion of high ratings vs. population")
+  geom_hline(yintercept = 0) +
+  labs(x="Mode Rating of Reviewer", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Mode Rating of Reviewer") +
+  annotate("text", min(mode_ratings$Category), 0, label = "Baseline Probability
+           of High Rating (55.375%)")
 
 
 # Note that we checked to make sure that it was *NOT* the case that many
@@ -171,8 +176,11 @@ time_ratings[,3] <- time_ratings1[,3]-55.375
 names(time_ratings) <- c("Analysis","Category", "Prop")
 
 ggplot(data=time_ratings, aes(x=Category, y=Prop)) +
-  geom_bar(stat="identity", fill="steelblue") +
-  labs(x="Hour", y="Proportion of High Rtngs - 55.375", title="Times of Day", subtitle="Proportion of high ratings vs. population")
+  geom_bar(stat="identity", fill="lightsteelblue") +
+  geom_hline(yintercept = 0) +
+  labs(x="Hour", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Hour of the Day") +
+  annotate("text", x = 7, 0, label = "Baseline Probability
+           of High Rating (55.375%)")
 
 
 # Release Date ------------------------------------------------------------
@@ -214,9 +222,13 @@ date_ratings[,2] <- date_ratings1[,1]
 date_ratings[,3] <- date_ratings1[,3]-55.375
 names(date_ratings) <- c("Analysis","Category", "Prop")
 
+
 ggplot(data=date_ratings, aes(x=Category, y=Prop)) + 
-  geom_bar(stat="identity", fill="seagreen") +
-  labs(x="Month", y="Proportion of High Rtngs - 55.375", title="Month of Year", subtitle="Proportion of high ratings vs. population")
+  geom_bar(stat="identity", fill="lightseagreen") +
+  geom_hline(yintercept = 0) +
+  labs(x="Month", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Month of Year") +
+  annotate("text", x = 3.2, 0, label = "Baseline Probability
+           of High Rating (55.375%)")
 
 
 # Genres -------------------------------------------------------------
@@ -269,7 +281,11 @@ genre_ratings
 
 ggplot(data=genre_ratings, aes(x=Category, y=Prop)) + 
   geom_bar(stat="identity", fill="peachpuff") +
-  labs(x="Genre", y="Proportion of High Rtngs - 55.375", title="Film Noir and War Genres", subtitle="Proportion of high ratings vs. population")
+  geom_hline(yintercept = 0) +
+  labs(x="Genre", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Genre (War or Film-Noir)") +
+  annotate("text", x = .5, y = 1, 0, label = "Baseline Probability
+           of High Rating (55.375%)")
+
 
 
 # State -------------------------------------------------------------------
@@ -352,8 +368,11 @@ names(state_ratings) <- c("Analysis","Category", "Prop")
 state_ratings <- state_ratings[1:10,]
 
 ggplot(data=state_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
-  geom_bar(stat="identity", fill="mediumpurple") +
-  labs(x="State", y="Proportion of High Rtngs - 55.375", title="Top 10 States", subtitle="Proportion of high ratings vs. population")
+  geom_bar(stat="identity", fill="lightsalmon") +
+  geom_hline(yintercept = 0) +
+  labs(x="State", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by State (Top 10)") +
+  annotate("text", x = 2.1, y = 2, 0, label = "Baseline Probability
+           of High Rating (55.375%)")
 
 
 # City --------------------------------------------------------------------
@@ -374,4 +393,4 @@ mastergraph
 ggplot(data=mastergraph, aes(x=Category, y=Prop))+
   geom_bar(fill='steelblue', stat="identity")+
   facet_wrap( ~ Analysis, scales="free_x")+
-  labs(x="Category", y="Proportion of High Rtngs - 55.375", title="Mode, Time of Day, Month in Year, Genre, and State", subtitle="Proportion of high ratings vs. population")
+  labs(x="Category", y="Prob of High Rating Compared to Baseline", title="Mode, Time of Day, Month in Year, Genre, and State", subtitle="Proportion of high ratings vs. population")

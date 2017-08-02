@@ -41,7 +41,7 @@ normalized_base_table <- reviews %>%
 # dataset?
 #
 
-# Define prop diff interval funtion for testing -------------------------------
+# Define prop diff interval funtion for testing significance ------------------
 propdiffint <- function(df){
   propdifftable <- as.data.frame(matrix(NA, nrow=nrow(df), ncol=3))
   names(propdifftable) <- c("category", "lowerbound", "upperbound")
@@ -103,23 +103,25 @@ high_mode_ratings <- mode_appended %>%
   as.data.frame() %>% 
   arrange(desc(perc_high_rating)) # 64% -- implies association
 
+# Find the proportional difference 95% confidence interval
 propdiffint(high_mode_ratings)
-# 0.08481171 0.09431742
+# 0.08481171 0.09431742 - Looks significantly higher
 
-
-high_mode_ratings
-
+# Create dataframe for graphing
 mode_ratings <- as.data.frame(matrix(NA, nrow=1,ncol=3))
 mode_ratings[1,] <- c("Mode","High Mode", 8.956)
 mode_ratings[2,] <- c("Mode","Low Mode", -18.43583)
 names(mode_ratings) <- c("Analysis","Category", "Prop")
 
-mode_ratings$Prop <- as.double(mode_ratings$Prop)
+mode_ratings$Prop <- as.double(mode_ratings$Prop) # Ensure y-axis is continuous numeric
   
-  ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
+# Graph it!
+ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
   geom_bar(stat="identity", fill="indianred") +
   geom_hline(yintercept = 0) +
-  labs(x="Mode Rating of Reviewer", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Mode Rating of Reviewer") +
+  labs(x="Mode Rating of Reviewer", 
+       y="Prob of High Rating Compared to Baseline", 
+       title="Probability of High Rating by Mode Rating of Reviewer") +
   annotate("text", min(mode_ratings$Category), 0, label = "Baseline Probability
            of High Rating (55.375%)")
 
@@ -168,19 +170,23 @@ propdiffint(time_ratings1)
 # 22    7 -0.094483974 -0.044184858
 # 23   10 -0.145866736 -0.089059425
 # 24    9 -0.144878581 -0.100499430
+# Numerous examples without 0 in interval - solidly predictive
 
+# Create graphing dataframe
 time_ratings <- as.data.frame(matrix(NA, nrow=24,ncol=3))
 time_ratings[,1] <- "Time"
 time_ratings[,2] <- time_ratings1[,1]
 time_ratings[,3] <- time_ratings1[,3]-55.375
 names(time_ratings) <- c("Analysis","Category", "Prop")
 
-time_ratings$Prop <- as.double(time_ratings$Prop)
+time_ratings$Prop <- as.double(time_ratings$Prop) # Y-axis is continuous numeric
 
+# Graph it!
 ggplot(data=time_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
   geom_bar(stat="identity", fill="lightsteelblue") +
   geom_hline(yintercept = 0) +
-  labs(x="Hour", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Hour of the Day") +
+  labs(x="Hour", y="Prob of High Rating Compared to Baseline", 
+       title="Probability of High Rating by Hour of the Day") +
   annotate("text", x = 7, 0, label = "Baseline Probability
            of High Rating (55.375%)")
 
@@ -214,22 +220,23 @@ propdiffint(date_ratings1)
 # 11        3 -0.10840282 -0.076300195
 # 12        5 -0.17090514 -0.129255407
 # 13        8 -0.17558169 -0.137922065
-# January is significant in a slightly higher rating, but the different is small.
+# January is significant for a slightly higher rating, but the difference is small.
 
-date_ratings1
-
+# Dataframe for graphing
 date_ratings <- as.data.frame(matrix(NA, nrow=13,ncol=3))
 date_ratings[,1] <- "Date"
 date_ratings[,2] <- date_ratings1[,1]
 date_ratings[,3] <- date_ratings1[,3]-55.375
 names(date_ratings) <- c("Analysis","Category", "Prop")
 
-date_ratings$Prop <- as.double(date_ratings$Prop)
+date_ratings$Prop <- as.double(date_ratings$Prop) #Y-axis numeric
 
+#Graph it!
 ggplot(data=date_ratings, aes(x=reorder(Category, -Prop), y=Prop)) + 
   geom_bar(stat="identity", fill="lightseagreen") +
   geom_hline(yintercept = 0) +
-  labs(x="Month", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Month of Year") +
+  labs(x="Month", y="Prob of High Rating Compared to Baseline", 
+       title="Probability of High Rating by Month of Year") +
   annotate("text", x = 3.2, 0, label = "Baseline Probability
            of High Rating (55.375%)")
 
@@ -263,6 +270,7 @@ genre_rating[2,2:4] <- normalized_base_table %>%
 genre_rating[2,1] <- "War"
 genre_rating[,4] <- genre_rating[,4]-55.375
 
+# Create dataframe for producing proportion difference confidence interval
 genre_loop <- genre_rating[,-3,drop=FALSE]
 genre_loop[,3] <- genre_loop[,3]+55.375
 names(genre_loop) <- c("genre", "n", "perc_high_rating")
@@ -271,21 +279,25 @@ propdiffint(genre_loop)
 #   category        lowerbound        upperbound
 # 1 FilmNoir 0.130875756445984 0.174203585735204
 # 2      War 0.101150638410004 0.121206778061585
+# Significant
 
 genre_rating
 
+# Dataframe for graphing
 genre_ratings <- as.data.frame(matrix(NA, nrow=2,ncol=3))
 genre_ratings[,1] <- "Genre"
 genre_ratings[,2] <- genre_rating[,1]
 genre_ratings[,3] <- genre_rating[,4]
 names(genre_ratings) <- c("Analysis","Category", "Prop")
 
-genre_ratings$Prop <- as.double(genre_ratings$Prop)
+genre_ratings$Prop <- as.double(genre_ratings$Prop) # y-axis numeric
 
+# Graph it!
 ggplot(data=genre_ratings, aes(x=Category, y=Prop)) + 
   geom_bar(stat="identity", fill="peachpuff") +
   geom_hline(yintercept = 0) +
-  labs(x="Genre", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Genre (War or Film-Noir)") +
+  labs(x="Genre", y="Prob of High Rating Compared to Baseline", 
+       title="Probability of High Rating by Genre (War or Film-Noir)") +
   annotate("text", x = .5, y = 1, 0, label = "Baseline Probability
            of High Rating (55.375%)")
 
@@ -361,20 +373,25 @@ propdiffint(state_loop)
 # 52       DE   -0.192306249370369 -0.00610284153872154
 # 53       AR   -0.320600288577238   0.0592541347310841
 # 54       ND   -0.218686108283944  -0.0922770951792588
+# Extremely predictive
 
+# Dataframe for graphing
 state_ratings <- as.data.frame(matrix(NA, nrow=54,ncol=3))
 state_ratings[,1] <- "State"
 state_ratings[,2] <- state_ratings1[,1]
 state_ratings[,3] <- state_ratings1[,4]-55.375
 names(state_ratings) <- c("Analysis","Category", "Prop")
 
+# Keep only the top 10
 state_ratings <- state_ratings[1:10,]
-state_ratings$Prop <- as.double(state_ratings$Prop)
+state_ratings$Prop <- as.double(state_ratings$Prop) # Y-axis numeric
 
+# Graph it!
 ggplot(data=state_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
   geom_bar(stat="identity", fill="lightsalmon") +
   geom_hline(yintercept = 0) +
-  labs(x="State", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by State (Top 10)") +
+  labs(x="State", y="Prob of High Rating Compared to Baseline", 
+       title="Probability of High Rating by State (Top 10)") +
   annotate("text", x = 2.1, y = 2, 0, label = "Baseline Probability
            of High Rating (55.375%)")
 
@@ -390,10 +407,17 @@ normalized_base_table %>%
   #as.data.frame() %>% 
   arrange(desc(perc_high_rating))
 
+# Combined Visuals --------------------------------------------------------
 
-mastergraph <- as.data.frame(rbind(mode_ratings, time_ratings,date_ratings,genre_ratings,state_ratings))
-mastergraph$Prop <- as.double(mastergraph$Prop)
+# Create a combined table across all analyses for combined visualization
+mastergraph <- as.data.frame(rbind(mode_ratings, 
+                                   time_ratings,
+                                   date_ratings,
+                                   genre_ratings,
+                                   state_ratings))
+mastergraph$Prop <- as.double(mastergraph$Prop) # y-axis numerical
 
+# Graph it!
 ggplot(data=mastergraph, aes(x=reorder(Category, -Prop), y=Prop))+
   geom_bar(fill='indianred', stat="identity")+
   geom_hline(yintercept=0)+

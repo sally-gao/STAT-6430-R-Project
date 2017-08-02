@@ -114,9 +114,9 @@ mode_ratings[1,] <- c("Mode","High Mode", 8.956)
 mode_ratings[2,] <- c("Mode","Low Mode", -18.43583)
 names(mode_ratings) <- c("Analysis","Category", "Prop")
 
-mode_ratings$Prop <- as.double(mode_ratings$Prop) + 
-
-ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
+mode_ratings$Prop <- as.double(mode_ratings$Prop)
+  
+  ggplot(data=mode_ratings, aes(x=Category, y=Prop)) +
   geom_bar(stat="identity", fill="indianred") +
   geom_hline(yintercept = 0) +
   labs(x="Mode Rating of Reviewer", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Mode Rating of Reviewer") +
@@ -175,7 +175,9 @@ time_ratings[,2] <- time_ratings1[,1]
 time_ratings[,3] <- time_ratings1[,3]-55.375
 names(time_ratings) <- c("Analysis","Category", "Prop")
 
-ggplot(data=time_ratings, aes(x=Category, y=Prop)) +
+time_ratings$Prop <- as.double(time_ratings$Prop)
+
+ggplot(data=time_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
   geom_bar(stat="identity", fill="lightsteelblue") +
   geom_hline(yintercept = 0) +
   labs(x="Hour", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Hour of the Day") +
@@ -222,8 +224,9 @@ date_ratings[,2] <- date_ratings1[,1]
 date_ratings[,3] <- date_ratings1[,3]-55.375
 names(date_ratings) <- c("Analysis","Category", "Prop")
 
+date_ratings$Prop <- as.double(date_ratings$Prop)
 
-ggplot(data=date_ratings, aes(x=Category, y=Prop)) + 
+ggplot(data=date_ratings, aes(x=reorder(Category, -Prop), y=Prop)) + 
   geom_bar(stat="identity", fill="lightseagreen") +
   geom_hline(yintercept = 0) +
   labs(x="Month", y="Prob of High Rating Compared to Baseline", title="Probability of High Rating by Month of Year") +
@@ -277,7 +280,7 @@ genre_ratings[,2] <- genre_rating[,1]
 genre_ratings[,3] <- genre_rating[,4]
 names(genre_ratings) <- c("Analysis","Category", "Prop")
 
-genre_ratings
+genre_ratings$Prop <- as.double(genre_ratings$Prop)
 
 ggplot(data=genre_ratings, aes(x=Category, y=Prop)) + 
   geom_bar(stat="identity", fill="peachpuff") +
@@ -366,6 +369,7 @@ state_ratings[,3] <- state_ratings1[,4]-55.375
 names(state_ratings) <- c("Analysis","Category", "Prop")
 
 state_ratings <- state_ratings[1:10,]
+state_ratings$Prop <- as.double(state_ratings$Prop)
 
 ggplot(data=state_ratings, aes(x=reorder(Category, -Prop), y=Prop)) +
   geom_bar(stat="identity", fill="lightsalmon") +
@@ -387,10 +391,13 @@ normalized_base_table %>%
   arrange(desc(perc_high_rating))
 
 
-mastergraph <- rbind(mode_ratings, time_ratings,date_ratings,genre_ratings,state_ratings)
-mastergraph
+mastergraph <- as.data.frame(rbind(mode_ratings, time_ratings,date_ratings,genre_ratings,state_ratings))
+mastergraph$Prop <- as.double(mastergraph$Prop)
 
-ggplot(data=mastergraph, aes(x=Category, y=Prop))+
-  geom_bar(fill='steelblue', stat="identity")+
+ggplot(data=mastergraph, aes(x=reorder(Category, -Prop), y=Prop))+
+  geom_bar(fill='indianred', stat="identity")+
+  geom_hline(yintercept=0)+
   facet_wrap( ~ Analysis, scales="free_x")+
-  labs(x="Category", y="Prob of High Rating Compared to Baseline", title="Mode, Time of Day, Month in Year, Genre, and State", subtitle="Proportion of high ratings vs. population")
+  labs(x="Category", y="Prob of High Rating Compared to Baseline", 
+       title="Probability of High Rating by:", 
+       subtitle="Month in Year, Genre, Mode, State, and Time of Day")
